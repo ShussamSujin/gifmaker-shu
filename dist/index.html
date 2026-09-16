@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="원하는 화면 영역을 최대 1분까지 바로 GIF로 만드는 가벼운 브라우저 편집기">
+  <meta name="theme-color" content="#f7a916">
+  <title>GIFMaker.SHU — 화면에서 바로 GIF</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='18' width='64' height='64' fill='%23f7a916'/%3E%3Cpath d='M17 40c0-11 6-20 15-20s15 9 15 20c-4 6-9 9-15 9s-11-3-15-9Z' fill='%23bd681e'/%3E%3Ccircle cx='26' cy='34' r='3' fill='%231d1814'/%3E%3Ccircle cx='38' cy='34' r='3' fill='%231d1814'/%3E%3Cellipse cx='32' cy='41' rx='5' ry='4' fill='%23000'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="scene" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="GIFMaker.SHU 홈">
+      <span class="brand-mark">G</span>
+      <span>GIFMaker<span class="brand-dot">.SHU</span></span>
+    </a>
+    <nav aria-label="바로가기">
+      <a href="#how">사용법</a>
+      <a href="#extension">확장프로그램</a>
+      <a href="./privacy.html">개인정보처리방침</a>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch to English">EN</button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="workspace-shell" aria-labelledby="main-title">
+      <div class="workspace-card">
+        <div class="eyebrow"><span></span> 브라우저 안에서 바로 완성</div>
+        <h1 id="main-title">원하는 곳만 골라<br><strong>바로 GIF로.</strong></h1>
+        <p class="lead">중간 동영상 파일 없이 화면을 선택하고, 영역을 잡고, 최대 1분 GIF를 저장하세요.</p>
+
+        <div class="action-row">
+          <button id="startCapture" class="primary" type="button">
+            <span class="record-dot"></span> 화면 선택하기
+          </button>
+          <label class="secondary file-button">
+            이미지 불러오기
+            <input id="imageInput" type="file" accept="image/*" multiple hidden>
+          </label>
+        </div>
+
+        <div id="status" class="status" role="status" aria-live="polite">준비됨 · 파일은 기기 밖으로 전송되지 않아요</div>
+
+        <div id="capturePanel" class="capture-panel" hidden>
+          <div class="preview-wrap" id="previewWrap">
+            <video id="captureVideo" muted autoplay playsinline></video>
+            <canvas id="imageCanvas" hidden></canvas>
+            <div id="selection" class="selection" tabindex="0" aria-label="캡처 영역. 드래그하여 조절"></div>
+            <div class="selection-hint">드래그해 영역 지정</div>
+          </div>
+
+          <div class="controls" aria-label="GIF 설정">
+            <label>길이
+              <select id="duration">
+                <option value="10">10초</option>
+                <option value="15" selected>15초</option>
+                <option value="30">30초</option>
+                <option value="60">60초</option>
+              </select>
+            </label>
+            <label>속도
+              <select id="fps">
+                <option value="5">5 fps</option>
+                <option value="8" selected>8 fps</option>
+                <option value="10">10 fps</option>
+                <option value="12">12 fps</option>
+              </select>
+            </label>
+            <label>가로 크기
+              <select id="width">
+                <option value="480">480 px</option>
+                <option value="640" selected>640 px</option>
+                <option value="800">800 px</option>
+                <option value="960">960 px</option>
+              </select>
+            </label>
+            <label>색상
+              <select id="colors">
+                <option value="64">가벼움</option>
+                <option value="128" selected>선명함</option>
+                <option value="256">최고</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="capture-actions">
+            <button id="record" class="primary" type="button" disabled>촬영 시작</button>
+            <button id="stop" class="danger" type="button" hidden>지금 완료</button>
+            <button id="reset" class="ghost" type="button">다시 선택</button>
+          </div>
+          <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
+          <p id="estimate" class="estimate">예상: 120프레임 · 긴 GIF는 저장까지 잠시 걸릴 수 있어요.</p>
+        </div>
+
+        <div id="editPanel" class="edit-panel" hidden>
+          <div class="edit-head">
+            <div><span class="edit-step">STEP 2</span><h2>짧게 다듬고 완성</h2></div>
+            <span id="editTime">00:00 / 00:00</span>
+          </div>
+          <div class="edit-preview">
+            <canvas id="editCanvas"></canvas>
+            <button id="playPreview" class="preview-play" type="button" aria-label="미리보기 재생">▶</button>
+          </div>
+          <input id="scrubber" class="scrubber" type="range" min="0" max="0" value="0" aria-label="장면 이동">
+
+          <div class="trim-grid">
+            <label>시작 <input id="trimStart" type="number" min="0" step="0.1" value="0"><span>초</span></label>
+            <label>끝 <input id="trimEnd" type="number" min="0" step="0.1" value="0"><span>초</span></label>
+          </div>
+
+          <div class="overlay-tools">
+            <div class="caption-tool">
+              <label for="captionText">이 장면에 자막</label>
+              <div><input id="captionText" maxlength="60" placeholder="자막을 입력하세요"><button id="addCaption" type="button">추가</button></div>
+            </div>
+            <div class="sticker-tool">
+              <span>스티커</span>
+              <div id="stickers" class="stickers" aria-label="스티커 선택">
+                <button type="button">✨</button><button type="button">👏</button><button type="button">❤️</button><button type="button">⭐</button><button type="button">😂</button><button type="button">👀</button><button type="button">🔥</button><button type="button">💡</button>
+              </div>
+            </div>
+            <label class="scene-duration">표시 시간
+              <select id="overlayDuration"><option value="1">1초</option><option value="3" selected>3초</option><option value="5">5초</option><option value="all">끝까지</option></select>
+            </label>
+          </div>
+          <div id="overlayList" class="overlay-list" aria-live="polite"></div>
+
+          <div class="capture-actions">
+            <button id="encode" class="primary" type="button">편집 적용하고 GIF 만들기</button>
+            <button id="backToCapture" class="ghost" type="button">다시 촬영</button>
+          </div>
+        </div>
+
+        <div id="result" class="result" hidden>
+          <img id="resultImage" alt="완성된 GIF 미리보기">
+          <div>
+            <strong>GIF 완성!</strong>
+            <span id="resultMeta"></span>
+          </div>
+          <a id="download" class="primary" download="gifmaker-shu.gif">GIF 저장</a>
+          <button id="makeAnother" class="ghost" type="button">하나 더 만들기</button>
+        </div>
+      </div>
+      <div class="mascot-caption" aria-label="슈슈 소개">
+        <span>안녕, 나는 슈슈!</span>
+        <strong>장면을 이어 GIF로 만들어 줄게.</strong>
+      </div>
+    </section>
+
+    <section id="how" class="content-section">
+      <div class="section-heading">
+        <span>3 STEPS</span>
+        <h2>복잡한 편집 없이 끝</h2>
+      </div>
+      <div class="steps">
+        <article><b>01</b><h3>화면 선택</h3><p>탭, 창 또는 전체 화면 중 캡처할 대상을 고릅니다.</p></article>
+        <article><b>02</b><h3>영역 지정</h3><p>미리보기에서 필요한 부분만 드래그해 잡습니다.</p></article>
+        <article><b>03</b><h3>GIF 저장</h3><p>최대 60초까지 바로 인코딩해 GIF 파일로 저장합니다.</p></article>
+      </div>
+    </section>
+
+    <section id="extension" class="extension-section">
+      <div>
+        <span class="pill">CHROME EXTENSION</span>
+        <h2>필요한 순간, 한 번에 캡처</h2>
+        <p>도구 모음의 슈슈 아이콘을 누르면 곧바로 영역 캡처가 시작됩니다. 영상 파일을 따로 저장하거나 다시 업로드할 필요가 없습니다.</p>
+        <a class="primary disabled" href="#" aria-disabled="true">Chrome 웹스토어 등록 준비 중</a>
+      </div>
+      <div class="extension-demo" aria-hidden="true">
+        <div class="browser-bar"><i></i><i></i><i></i><span></span><b>G</b></div>
+        <div class="demo-screen"><div class="crop-box"><span>00:18</span></div></div>
+      </div>
+    </section>
+
+    <section class="shu-family" aria-labelledby="shu-family-title">
+      <div><span>SHU FAMILY</span><h2 id="shu-family-title">슈 패밀리의 다른 도구</h2></div>
+      <div class="family-links">
+        <a href="https://shu.is" target="_blank" rel="noopener"><b>SHU.IS</b><small>패밀리 홈</small></a>
+        <a href="https://blacknwhite.shu.is" target="_blank" rel="noopener"><b>Black & White</b><small>콘텐츠 도구</small></a>
+        <a href="https://adminsimulator.shu.is" target="_blank" rel="noopener"><b>Admin Simulator</b><small>관리자 연수 실습실</small></a>
+        <a href="https://shulution.shu.is" target="_blank" rel="noopener"><b>SHUlution</b><small>Workspace 관리 도구</small></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>GIFMaker.SHU</strong>
+    <span>모든 처리는 사용자의 브라우저 안에서 이루어집니다.</span>
+    <a href="./privacy.html">개인정보처리방침</a>
+    <a href="./support.html">도움말</a>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

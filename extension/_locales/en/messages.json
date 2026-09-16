@@ -1,0 +1,6 @@
+{
+  "extensionName": { "message": "GIFMaker.SHU - Capture any area to GIF" },
+  "extensionDescription": { "message": "Capture any screen area for up to 60 seconds, add captions and stickers, and save directly as a GIF with no intermediate video." },
+  "actionTitle": { "message": "Create an area GIF with Shushu" },
+  "commandDescription": { "message": "Open GIF area capture" }
+}

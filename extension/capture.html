@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7a916">
+  <title>GIFMaker.SHU</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="extension-page">
+  <div class="scene" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand"><img src="./icons/icon-48.png" alt=""><span>GIFMaker<span class="brand-dot">.SHU</span></span></div>
+    <div class="extension-header-actions"><a href="https://gifmaker.shu.is" target="_blank" rel="noopener">gifmaker.shu.is</a><button id="langToggle" class="lang-toggle" type="button">EN</button></div>
+  </header>
+  <main class="extension-main">
+    <section class="workspace-card">
+      <div class="eyebrow"><span></span> 브라우저 안에서 바로 완성</div>
+      <h1>원하는 곳만 골라<br><strong>바로 GIF로.</strong></h1>
+      <p class="lead">중간 동영상 파일 없이 화면을 선택하고, 영역을 잡고, 최대 1분 GIF를 저장하세요.</p>
+      <div class="action-row">
+        <button id="startCapture" class="primary" type="button"><span class="record-dot"></span> 화면 선택하기</button>
+        <label class="secondary file-button">이미지 불러오기<input id="imageInput" type="file" accept="image/*" multiple hidden></label>
+      </div>
+      <div id="status" class="status" role="status" aria-live="polite">준비됨 · 파일은 기기 밖으로 전송되지 않아요</div>
+
+      <div id="capturePanel" class="capture-panel" hidden>
+        <div class="preview-wrap" id="previewWrap"><video id="captureVideo" muted autoplay playsinline></video><canvas id="imageCanvas" hidden></canvas><div id="selection" class="selection"></div><div class="selection-hint">드래그해 영역 지정</div></div>
+        <div class="controls">
+          <label>길이<select id="duration"><option value="10">10초</option><option value="15" selected>15초</option><option value="30">30초</option><option value="60">60초</option></select></label>
+          <label>속도<select id="fps"><option value="5">5 fps</option><option value="8" selected>8 fps</option><option value="10">10 fps</option><option value="12">12 fps</option></select></label>
+          <label>가로 크기<select id="width"><option value="480">480 px</option><option value="640" selected>640 px</option><option value="800">800 px</option><option value="960">960 px</option></select></label>
+          <label>색상<select id="colors"><option value="64">가벼움</option><option value="128" selected>선명함</option><option value="256">최고</option></select></label>
+        </div>
+        <div class="capture-actions"><button id="record" class="primary" type="button" disabled>촬영 시작</button><button id="stop" class="danger" type="button" hidden>지금 완료</button><button id="reset" class="ghost" type="button">다시 선택</button></div>
+        <div class="progress-track"><div id="progressBar"></div></div><p id="estimate" class="estimate"></p>
+      </div>
+
+      <div id="editPanel" class="edit-panel" hidden>
+        <div class="edit-head"><div><span class="edit-step">STEP 2</span><h2>짧게 다듬고 완성</h2></div><span id="editTime">00:00 / 00:00</span></div>
+        <div class="edit-preview"><canvas id="editCanvas"></canvas><button id="playPreview" class="preview-play" type="button">▶</button></div>
+        <input id="scrubber" class="scrubber" type="range" min="0" max="0" value="0">
+        <div class="trim-grid"><label>시작<input id="trimStart" type="number" min="0" step="0.1" value="0"><span>초</span></label><label>끝<input id="trimEnd" type="number" min="0" step="0.1" value="0"><span>초</span></label></div>
+        <div class="overlay-tools">
+          <div class="caption-tool"><label for="captionText">이 장면에 자막</label><div><input id="captionText" maxlength="60" placeholder="자막을 입력하세요"><button id="addCaption" type="button">추가</button></div></div>
+          <div class="sticker-tool"><span>스티커</span><div id="stickers" class="stickers"><button type="button">✨</button><button type="button">👏</button><button type="button">❤️</button><button type="button">⭐</button><button type="button">😂</button><button type="button">👀</button><button type="button">🔥</button><button type="button">💡</button></div></div>
+          <label class="scene-duration">표시 시간<select id="overlayDuration"><option value="1">1초</option><option value="3" selected>3초</option><option value="5">5초</option><option value="all">끝까지</option></select></label>
+        </div>
+        <div id="overlayList" class="overlay-list"></div>
+        <div class="capture-actions"><button id="encode" class="primary" type="button">편집 적용하고 GIF 만들기</button><button id="backToCapture" class="ghost" type="button">다시 촬영</button></div>
+      </div>
+
+      <div id="result" class="result" hidden><img id="resultImage" alt=""><div><strong>GIF 완성!</strong><span id="resultMeta"></span></div><a id="download" class="primary" download="gifmaker-shu.gif">GIF 저장</a><button id="makeAnother" class="ghost" type="button">하나 더 만들기</button></div>
+    </section>
+  </main>
+  <footer><strong>GIFMaker.SHU</strong><span>모든 처리는 사용자의 브라우저 안에서 이루어집니다.</span><a href="https://gifmaker.shu.is/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><a href="https://gifmaker.shu.is/support.html" target="_blank" rel="noopener">도움말</a></footer>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

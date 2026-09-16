@@ -1,0 +1,10 @@
+{
+  "name": "gifmaker-shu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser-only GIF capture and editing with the Shushu poodle mascot",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "gifenc": "1.0.3"
+  }
+}
