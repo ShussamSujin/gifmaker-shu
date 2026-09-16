@@ -1,3 +1,7 @@
+@font-face { font-family: "Jua"; font-style: normal; font-weight: 400; font-display: swap; src: url('./fonts/jua-400.woff2') format('woff2'); }
+@font-face { font-family: "Gaegu"; font-style: normal; font-weight: 400; font-display: swap; src: url('./fonts/gaegu-400.woff2') format('woff2'); }
+@font-face { font-family: "Gaegu"; font-style: normal; font-weight: 700; font-display: swap; src: url('./fonts/gaegu-700.woff2') format('woff2'); }
+
 :root {
   color-scheme: light;
   --sky: #a9dcff;
