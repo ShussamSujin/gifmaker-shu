@@ -32,26 +32,31 @@
       <div class="workspace-card">
         <div class="eyebrow"><span></span> 브라우저 안에서 바로 완성</div>
         <h1 id="main-title">원하는 곳만 골라<br><strong>바로 GIF로.</strong></h1>
-        <p class="lead">중간 동영상 파일 없이 화면을 선택하고, 영역을 잡고, 최대 1분 GIF를 저장하세요.</p>
+        <p class="lead">사진과 화면 촬영을 원하는 순서로 이어 붙여 하나의 GIF로 만드세요. 중간 동영상 파일은 만들지 않습니다.</p>
 
         <div class="action-row">
           <button id="startCapture" class="primary" type="button">
-            <span class="record-dot"></span> 화면 선택하기
+            <span class="record-dot"></span> 화면 촬영하기
           </button>
           <label class="secondary file-button">
-            이미지 불러오기
+            사진 추가하기
             <input id="imageInput" type="file" accept="image/*" multiple hidden>
           </label>
         </div>
 
-        <div id="status" class="status" role="status" aria-live="polite">준비됨 · 파일은 기기 밖으로 전송되지 않아요</div>
+        <div id="status" class="status" role="status" aria-live="polite" data-no-i18n></div>
 
         <div id="capturePanel" class="capture-panel" hidden>
           <div class="preview-wrap" id="previewWrap">
             <video id="captureVideo" muted autoplay playsinline></video>
-            <canvas id="imageCanvas" hidden></canvas>
             <div id="selection" class="selection" tabindex="0" aria-label="캡처 영역. 드래그하여 조절"></div>
             <div class="selection-hint">드래그해 영역 지정</div>
+            <div id="countdown" class="countdown" data-no-i18n hidden></div>
+          </div>
+
+          <div class="crop-row">
+            <span id="selectionSize" data-no-i18n></span>
+            <button id="selectAll" class="ghost" type="button">전체 화면 사용</button>
           </div>
 
           <div class="controls" aria-label="GIF 설정">
@@ -89,19 +94,21 @@
             </label>
           </div>
 
+          <p class="capture-tip">촬영을 시작하면 3초 뒤부터 녹화돼요. 그 사이 원하는 탭으로 옮겨 재생 버튼을 누르세요. 멈출 때는 브라우저 아래의 “공유 중지”를 누르면 됩니다.</p>
+
           <div class="capture-actions">
             <button id="record" class="primary" type="button" disabled>촬영 시작</button>
             <button id="stop" class="danger" type="button" hidden>지금 완료</button>
-            <button id="reset" class="ghost" type="button">다시 선택</button>
+            <button id="reset" class="ghost" type="button">화면 다시 선택</button>
           </div>
           <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
-          <p id="estimate" class="estimate">예상: 120프레임 · 긴 GIF는 저장까지 잠시 걸릴 수 있어요.</p>
+          <p id="estimate" class="estimate" data-no-i18n></p>
         </div>
 
-        <div id="editPanel" class="edit-panel" hidden>
+        <div id="studio" class="edit-panel" hidden>
           <div class="edit-head">
-            <div><span class="edit-step">STEP 2</span><h2>짧게 다듬고 완성</h2></div>
-            <span id="editTime">00:00 / 00:00</span>
+            <div><span class="edit-step">STUDIO</span><h2>순서를 정하고 다듬기</h2></div>
+            <span id="editTime" data-no-i18n>00:00 / 00:00</span>
           </div>
           <div class="edit-preview">
             <canvas id="editCanvas"></canvas>
@@ -109,10 +116,12 @@
           </div>
           <input id="scrubber" class="scrubber" type="range" min="0" max="0" value="0" aria-label="장면 이동">
 
-          <div class="trim-grid">
-            <label>시작 <input id="trimStart" type="number" min="0" step="0.1" value="0"><span>초</span></label>
-            <label>끝 <input id="trimEnd" type="number" min="0" step="0.1" value="0"><span>초</span></label>
+          <div class="timeline-head">
+            <strong>타임라인</strong>
+            <span id="clipCount" data-no-i18n></span>
           </div>
+          <div id="timeline" class="timeline" data-no-i18n></div>
+          <div id="clipTools" class="clip-tools" data-no-i18n hidden></div>
 
           <div class="overlay-tools">
             <div class="caption-tool">
@@ -129,11 +138,11 @@
               <select id="overlayDuration"><option value="1">1초</option><option value="3" selected>3초</option><option value="5">5초</option><option value="all">끝까지</option></select>
             </label>
           </div>
-          <div id="overlayList" class="overlay-list" aria-live="polite"></div>
+          <div id="overlayList" class="overlay-list" aria-live="polite" data-no-i18n></div>
 
           <div class="capture-actions">
-            <button id="encode" class="primary" type="button">편집 적용하고 GIF 만들기</button>
-            <button id="backToCapture" class="ghost" type="button">다시 촬영</button>
+            <button id="encode" class="primary" type="button">GIF 만들기</button>
+            <button id="clearAll" class="ghost" type="button">전부 지우기</button>
           </div>
         </div>
 
@@ -141,10 +150,10 @@
           <img id="resultImage" alt="완성된 GIF 미리보기">
           <div>
             <strong>GIF 완성!</strong>
-            <span id="resultMeta"></span>
+            <span id="resultMeta" data-no-i18n></span>
           </div>
           <a id="download" class="primary" download="gifmaker-shu.gif">GIF 저장</a>
-          <button id="makeAnother" class="ghost" type="button">하나 더 만들기</button>
+          <button id="makeAnother" class="ghost" type="button">닫기</button>
         </div>
       </div>
       <div class="mascot-caption" aria-label="슈슈 소개">
@@ -159,9 +168,9 @@
         <h2>복잡한 편집 없이 끝</h2>
       </div>
       <div class="steps">
-        <article><b>01</b><h3>화면 선택</h3><p>탭, 창 또는 전체 화면 중 캡처할 대상을 고릅니다.</p></article>
-        <article><b>02</b><h3>영역 지정</h3><p>미리보기에서 필요한 부분만 드래그해 잡습니다.</p></article>
-        <article><b>03</b><h3>GIF 저장</h3><p>최대 60초까지 바로 인코딩해 GIF 파일로 저장합니다.</p></article>
+        <article><b>01</b><h3>장면 모으기</h3><p>사진을 넣고 화면도 촬영해 타임라인에 쌓습니다.</p></article>
+        <article><b>02</b><h3>순서 정하기</h3><p>타임라인에서 순서와 표시 시간을 조절합니다.</p></article>
+        <article><b>03</b><h3>GIF 저장</h3><p>자막과 스티커를 얹어 하나의 GIF로 저장합니다.</p></article>
       </div>
     </section>
 

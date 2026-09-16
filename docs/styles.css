@@ -154,3 +154,34 @@ footer { width: min(1120px, calc(100% - 36px)); margin: 0 auto; padding: 20px 0 
 /* cute fonts: Jua for headings & buttons, Gaegu for body */
 h1, h2, h3, h1 strong, .brand, .brand-mark, .primary, .secondary, .ghost, .danger, .lang-toggle, .steps b, .edit-step, .eyebrow, .pill, .section-heading span, .shu-family > div > span, .family-links b { font-family: "Jua", "Gaegu", sans-serif; font-weight: 400; letter-spacing: 0; }
 h1 { line-height: 1.12; }
+
+/* ---- timeline studio ---- */
+.crop-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 10px 0 4px; color: var(--muted); font-size: .85rem; }
+.crop-row .ghost { min-height: 34px; padding: 0 12px; font-size: .85rem; }
+.countdown { position: absolute; inset: 0; display: grid; place-items: center; font-family: "Jua", sans-serif; font-size: clamp(4rem, 14vw, 8rem); color: #fff; background: rgba(28,19,12,.55); text-shadow: 0 8px 24px rgba(0,0,0,.4); }
+.countdown[hidden] { display: none; }
+.capture-tip { margin: 12px 0 0; padding: 11px 14px; border-radius: 14px; background: rgba(247,170,22,.16); color: #6b4a22; font-size: .86rem; line-height: 1.45; }
+.timeline-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 18px 0 8px; }
+.timeline-head strong { font-family: "Jua", sans-serif; font-weight: 400; font-size: 1.1rem; }
+.timeline-head span { color: var(--muted); font-size: .84rem; }
+.timeline { display: flex; gap: 10px; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: thin; }
+.timeline-empty { margin: 0; padding: 20px 14px; width: 100%; text-align: center; color: var(--muted); border: 1.5px dashed rgba(164,95,37,.32); border-radius: 16px; font-size: .88rem; }
+.clip { flex: 0 0 auto; display: grid; gap: 5px; }
+.clip-thumb { position: relative; width: 132px; height: 88px; padding: 0; border: 2.5px solid transparent; border-radius: 14px; background: #241d18 center / cover no-repeat; cursor: pointer; overflow: hidden; }
+.clip.selected .clip-thumb { border-color: var(--sun); box-shadow: 0 6px 18px rgba(190,103,0,.28); }
+.clip-badge { position: absolute; left: 5px; bottom: 5px; padding: 3px 8px; border-radius: 999px; color: #fff; background: rgba(28,19,12,.72); font-size: .68rem; font-weight: 700; }
+.clip-actions { display: flex; gap: 4px; justify-content: center; }
+.clip-actions button { width: 38px; height: 28px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.8); cursor: pointer; font-size: .72rem; }
+.clip-actions button:disabled { opacity: .35; cursor: default; }
+.clip-actions .danger-icon { color: var(--coral); }
+.clip-tools { margin: 4px 0 14px; padding: 13px 15px; border-radius: 14px; background: rgba(126,79,42,.07); }
+.clip-tools[hidden] { display: none; }
+.clip-duration { display: grid; grid-template-columns: auto minmax(110px, 170px); align-items: center; gap: 10px; color: var(--muted); font-size: .84rem; }
+.clip-duration select { min-height: 38px; }
+.clip-trim { display: grid; grid-template-columns: auto 1fr 1fr auto; align-items: center; gap: 10px; color: var(--muted); font-size: .84rem; }
+.clip-range { width: 100%; accent-color: var(--sun-dark); }
+.clip-trim-readout { font-weight: 800; white-space: nowrap; }
+@media (max-width: 620px) {
+  .clip-trim { grid-template-columns: 1fr 1fr; }
+  .clip-trim span:first-child, .clip-trim-readout { grid-column: 1 / 3; }
+}

@@ -20,7 +20,7 @@ self.onmessage = (event) => {
       const index = applyPalette(rgba, palette, 'rgba4444');
       encoder.writeFrame(index, settings.width, settings.height, {
         palette,
-        delay: settings.delay,
+        delay: data.delay ?? settings.delay,
         repeat: count === 0 ? 0 : undefined
       });
       count += 1;
