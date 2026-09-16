@@ -804,7 +804,8 @@ if ('modelContext' in document && document.modelContext?.registerTool) {
 // ?demo fills the timeline with sample scenes so the UI can be reviewed
 // or screenshotted without granting screen-capture permission.
 async function runDemo() {
-  if (!new URLSearchParams(location.search).has('demo')) return;
+  const params = new URLSearchParams(location.search);
+  if (!params.has('demo')) return;
   const make = (from, to, label) => new Promise((resolve) => {
     const canvas = document.createElement('canvas');
     canvas.width = 1280;
@@ -831,6 +832,8 @@ async function runDemo() {
   addOverlay('caption', '슈슈랑 GIF 만들기');
   addOverlay('sticker', '✨');
   setStatus(t().imageLoaded(scenes.length));
+  const scroll = Number(params.get('scroll'));
+  if (scroll) window.scrollTo(0, scroll);
 }
 
 applyLocale();

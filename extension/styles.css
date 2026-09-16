@@ -155,7 +155,7 @@ footer { width: min(1120px, calc(100% - 36px)); margin: 0 auto; padding: 20px 0 
 .extension-page .brand img { width: 38px; height: 38px; border-radius: 12px; object-fit: cover; }
 .extension-header-actions { display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: .88rem; }
 .extension-main { width: min(980px, calc(100% - 32px)); margin: 18px auto 54px; }
-.extension-main .workspace-card { max-width: 720px; margin: 0 auto; }
+.extension-main .workspace-card { max-width: 660px; margin: 0; }
 .extension-header-actions a { padding: 6px 12px; border: 1px solid rgba(70,42,22,.16); border-radius: 999px; background: rgba(255,255,255,.5); font-size: .82rem; }
 .extension-header-actions a:hover { color: var(--sun-dark); border-color: rgba(215,122,8,.4); }
 .extension-page footer { width: min(980px, calc(100% - 32px)); margin-bottom: 26px; padding: 16px 22px 18px; border: 1px solid rgba(255,255,255,.7); border-radius: 18px; background: rgba(255,252,242,.82); backdrop-filter: blur(12px); }
