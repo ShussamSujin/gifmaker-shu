@@ -44,7 +44,7 @@ const translations = {
   en: {
     '사용법':'How it works','확장프로그램':'Extension','개인정보처리방침':'Privacy','브라우저 안에서 바로 완성':'Made entirely in your browser',
     '원하는 곳만 골라':'Select any area','바로 GIF로.':'Turn it into a GIF.','중간 동영상 파일 없이 화면을 선택하고, 영역을 잡고, 최대 1분 GIF를 저장하세요.':'Choose a screen, crop an area, and save up to a 60-second GIF with no intermediate video file.',
-    '화면 선택하기':'Choose screen','이미지 불러오기':'Load images','드래그해 영역 지정':'Drag to select area','길이':'Length','속도':'Speed','가로 크기':'Width','색상':'Colors','가벼움':'Small','선명함':'Sharp','최고':'Best',
+    '화면 선택하기':'Choose screen','이미지 불러오기':'Load images','드래그해 영역 지정':'Drag to select area','길이':'Length','속도':'Speed','가로 크기':'Width','색상':'Colors','가벼움':'Small','선명함':'Sharp','최고':'Best','원본 크기':'Original size',
     '촬영 시작':'Start recording','지금 완료':'Finish now','다시 선택':'Choose again','짧게 다듬고 완성':'Quick edit','시작':'Start','끝':'End','초':'sec','이 장면에 자막':'Caption this scene','자막을 입력하세요':'Type a caption','추가':'Add','스티커':'Stickers','표시 시간':'Show for','끝까지':'Until end','편집 적용하고 GIF 만들기':'Apply edits & make GIF','다시 촬영':'Record again','GIF 완성!':'GIF ready!','GIF 저장':'Save GIF','하나 더 만들기':'Make another',
     '안녕, 나는 슈슈!':'Hi, I’m Shushu!','장면을 이어 GIF로 만들어 줄게.':'I’ll turn your moments into a GIF.','복잡한 편집 없이 끝':'Done in three simple steps','화면 선택':'Choose a screen','탭, 창 또는 전체 화면 중 캡처할 대상을 고릅니다.':'Pick a tab, window, or full screen.','영역 지정':'Select an area','미리보기에서 필요한 부분만 드래그해 잡습니다.':'Drag around exactly what you need.','GIF 저장':'Save the GIF','최대 60초까지 바로 인코딩해 GIF 파일로 저장합니다.':'Encode up to 60 seconds directly as a GIF.',
     '필요한 순간, 한 번에 캡처':'Capture in one click','도구 모음의 슈슈 아이콘을 누르면 곧바로 영역 캡처가 시작됩니다. 영상 파일을 따로 저장하거나 다시 업로드할 필요가 없습니다.':'Click Shushu in your toolbar to capture an area instantly. No video export or re-upload required.','Chrome 웹스토어 등록 준비 중':'Chrome Web Store listing in progress','슈 패밀리의 다른 도구':'More from the SHU family','패밀리 홈':'Family home','콘텐츠 도구':'Content tool','관리자 연수 실습실':'Admin training lab','Workspace 관리 도구':'Workspace admin tool','메일 도우미':'Mail helper','🚧 계속 추가될 예정':'🚧 More coming soon','모든 처리는 사용자의 브라우저 안에서 이루어집니다.':'Everything is processed inside your browser.','도움말':'Support','문의: gajungssamzzang@gmail.com':'Contact: gajungssamzzang@gmail.com','단축키 Ctrl+Shift+G로 언제든 열 수 있어요':'Open anytime with Ctrl+Shift+G'
@@ -111,7 +111,7 @@ async function chooseScreen() {
   cleanupStream();
   setStatus(copy[locale].choose);
   try {
-    stream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: { ideal: 30, max: 30 } }, audio: false });
+    stream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: { ideal: 30, max: 30 }, width: { ideal: 3840 }, height: { ideal: 2160 } }, audio: false });
     ui.captureVideo.srcObject = stream;
     await ui.captureVideo.play();
     ui.capturePanel.hidden = false;
@@ -131,14 +131,15 @@ function cleanupStream() {
   ui.captureVideo.srcObject = null;
 }
 
-async function canvasBlob(canvas, type = 'image/webp', quality = .82) {
+async function canvasBlob(canvas, type = 'image/webp', quality = .92) {
   return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
 }
 
 function selectedOutputSize(sourceWidth, sourceHeight) {
   const cropW = Math.max(2, Math.round(sourceWidth * selection.w));
   const cropH = Math.max(2, Math.round(sourceHeight * selection.h));
-  const width = Math.min(Number(ui.width.value), cropW);
+  const requested = ui.width.value === 'source' ? cropW : Number(ui.width.value);
+  const width = Math.min(requested, cropW);
   return { width: Math.max(2, Math.round(width / 2) * 2), height: Math.max(2, Math.round((width * cropH / cropW) / 2) * 2), cropW, cropH };
 }
 
@@ -191,7 +192,8 @@ async function loadImages(files) {
   overlays = [];
   frameDelay = 500;
   const bitmaps = await Promise.all([...files].map((file) => createImageBitmap(file)));
-  const maxW = Math.min(Number(ui.width.value), Math.max(...bitmaps.map((b) => b.width)));
+  const naturalMax = Math.max(...bitmaps.map((b) => b.width));
+  const maxW = ui.width.value === 'source' ? naturalMax : Math.min(Number(ui.width.value), naturalMax);
   const first = bitmaps[0];
   frameSize = { width: Math.round(maxW / 2) * 2, height: Math.round((maxW * first.height / first.width) / 2) * 2 };
   const canvas = document.createElement('canvas'); canvas.width = frameSize.width; canvas.height = frameSize.height;
