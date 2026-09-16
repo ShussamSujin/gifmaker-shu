@@ -93,7 +93,8 @@ const translations = {
   }
 };
 
-let locale = (localStorage.getItem('gifmaker-locale') || navigator.language || 'ko').toLowerCase().startsWith('ko') ? 'ko' : 'en';
+const requestedLocale = new URLSearchParams(location.search).get('lang');
+let locale = (requestedLocale || localStorage.getItem('gifmaker-locale') || navigator.language || 'ko').toLowerCase().startsWith('ko') ? 'ko' : 'en';
 let stream = null;
 let recording = false;
 let clips = [];
@@ -829,7 +830,7 @@ async function runDemo() {
     make('#ffc9b8', '#e65d46', '3')
   ]);
   for (const scene of scenes) await addClip('image', [scene]);
-  addOverlay('caption', '슈슈랑 GIF 만들기');
+  addOverlay('caption', locale === 'ko' ? '슈슈랑 GIF 만들기' : 'Made with Shushu');
   addOverlay('sticker', '✨');
   setStatus(t().imageLoaded(scenes.length));
   const scroll = Number(params.get('scroll'));
