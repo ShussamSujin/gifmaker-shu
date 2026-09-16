@@ -180,7 +180,7 @@ async function addClip(kind, frames) {
 
 async function loadImages(files) {
   if (!files.length) return;
-  const seconds = 1.2;
+  const seconds = 1;
   const frames = [];
   for (const file of files) {
     const bitmap = await createImageBitmap(file);
@@ -467,11 +467,14 @@ function renderClipTools() {
     label.className = 'clip-duration';
     label.append(document.createTextNode(t().showFor));
     const select = document.createElement('select');
-    [0.5, 1, 1.5, 2, 3, 5].forEach((value) => {
+    const current = clip.frames[0].delay / 1000;
+    const choices = [0.5, 1, 1.5, 2, 3, 5];
+    const closest = choices.reduce((best, value) => Math.abs(value - current) < Math.abs(best - current) ? value : best, choices[0]);
+    choices.forEach((value) => {
       const option = document.createElement('option');
       option.value = value;
       option.textContent = `${value}${t().sec}`;
-      option.selected = Math.abs(clip.frames[0].delay / 1000 - value) < .01;
+      option.selected = value === closest;
       select.append(option);
     });
     select.addEventListener('change', () => {
@@ -798,5 +801,38 @@ if ('modelContext' in document && document.modelContext?.registerTool) {
   } catch (error) { console.debug('WebMCP unavailable', error); }
 }
 
+// ?demo fills the timeline with sample scenes so the UI can be reviewed
+// or screenshotted without granting screen-capture permission.
+async function runDemo() {
+  if (!new URLSearchParams(location.search).has('demo')) return;
+  const make = (from, to, label) => new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1280;
+    canvas.height = 720;
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 1280, 720);
+    gradient.addColorStop(0, from);
+    gradient.addColorStop(1, to);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 1280, 720);
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    ctx.font = '700 104px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, 640, 360);
+    canvas.toBlob((blob) => resolve({ blob, w: 1280, h: 720, delay: 1000 }));
+  });
+  const scenes = await Promise.all([
+    make('#ffd483', '#f79a2a', '1'),
+    make('#a9dcff', '#4f9ce8', '2'),
+    make('#ffc9b8', '#e65d46', '3')
+  ]);
+  for (const scene of scenes) await addClip('image', [scene]);
+  addOverlay('caption', '슈슈랑 GIF 만들기');
+  addOverlay('sticker', '✨');
+  setStatus(t().imageLoaded(scenes.length));
+}
+
 applyLocale();
 setStatus(t().ready);
+runDemo();
