@@ -1,6 +1,6 @@
 {
-  "extensionName": { "message": "GIFMaker.SHU - 영역을 바로 GIF로" },
-  "extensionDescription": { "message": "원하는 화면 영역을 최대 1분까지 촬영하고 자막·스티커를 더해 중간 동영상 없이 GIF로 저장합니다." },
+  "extensionName": { "message": "GIFMaker.SHU - 화면과 사진을 바로 GIF로" },
+  "extensionDescription": { "message": "화면 촬영과 사진을 한 타임라인에 이어 붙이고 자막·스티커를 얹어 중간 동영상 없이 GIF로 저장합니다." },
   "actionTitle": { "message": "슈슈로 화면 영역 GIF 만들기" },
   "commandDescription": { "message": "GIF 영역 캡처 열기" }
 }
