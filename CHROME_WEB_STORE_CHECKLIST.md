@@ -46,3 +46,15 @@ Chrome's native screen-sharing picker asks the user to select a tab, window, or 
 frames and imported photos stay in the current browser session, are edited locally, encoded by a
 bundled GIF library, and downloaded as a GIF. No intermediate MP4 file is created and nothing is
 uploaded to an operator server.
+
+## Promotional tiles (24-bit PNG, no alpha)
+
+| Asset | Size | File |
+| --- | --- | --- |
+| Small tile | 440x280 | `store-assets/promo-small-440x280.png` |
+| Marquee tile | 1400x560 | `store-assets/promo-marquee-1400x560.png` |
+| Small tile (EN) | 440x280 | `store-assets/promo-small-en-440x280.png` |
+| Marquee tile (EN) | 1400x560 | `store-assets/promo-marquee-en-1400x560.png` |
+
+Rendered from `store-assets/promo.html` (`?tile=small|marquee&lang=ko|en`) with headless Chrome
+at the exact tile size, then converted to RGB so the PNG carries no alpha channel.

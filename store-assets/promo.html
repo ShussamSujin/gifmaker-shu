@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>GIFMaker.SHU promo tiles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { overflow: hidden; background: #f7d288; }
+
+    .tile {
+      position: relative; overflow: hidden;
+      display: flex; align-items: center;
+      font-family: "Gaegu", system-ui, sans-serif; color: #2f1f10;
+      background: #f7d288;
+    }
+    .tile::before {
+      content: ""; position: absolute; inset: 0;
+      background: url('../docs/assets/shushu-hero.png') right center / cover no-repeat;
+    }
+    /* Warm scrim so the wordmark stays readable over the artwork */
+    .tile::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(255,248,232,.97) 0%, rgba(255,246,226,.9) 38%, rgba(255,244,220,.35) 58%, rgba(255,244,220,0) 74%);
+    }
+    .copy { position: relative; z-index: 2; }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { border-radius: 50%; }
+    .brand span { font-family: "Jua", sans-serif; letter-spacing: -.01em; }
+    .dot { color: #d77a08; }
+    h1 { font-family: "Jua", sans-serif; font-weight: 400; line-height: 1.12; letter-spacing: -.01em; }
+    h1 em { font-style: normal; color: #d77a08; }
+    p { color: #7a5a3c; font-weight: 700; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chips b {
+      font-family: "Jua", sans-serif; font-weight: 400;
+      background: rgba(247,170,22,.2); border: 1.5px solid rgba(215,122,8,.36);
+      color: #8a5510; border-radius: 999px;
+    }
+
+    /* ---- 440x280 ---- */
+    body.small, body.small .tile { width: 440px; height: 280px; }
+    body.small .tile { padding: 26px 24px; }
+    body.small .brand img { width: 34px; height: 34px; }
+    body.small .brand span { font-size: 1.12rem; }
+    body.small h1 { margin: 12px 0 8px; font-size: 1.9rem; }
+    body.small p { font-size: .95rem; line-height: 1.35; max-width: 215px; }
+    body.small .tile::after {
+      background: linear-gradient(90deg, rgba(255,248,232,.98) 0%, rgba(255,246,226,.95) 42%, rgba(255,244,220,.5) 62%, rgba(255,244,220,0) 80%);
+    }
+
+    /* ---- 1400x560 ---- */
+    body.marquee, body.marquee .tile { width: 1400px; height: 560px; }
+    body.marquee .tile { padding: 0 86px; }
+    body.marquee .brand img { width: 64px; height: 64px; }
+    body.marquee .brand span { font-size: 2.15rem; }
+    body.marquee h1 { margin: 20px 0 16px; font-size: 3.9rem; }
+    body.marquee p { font-size: 1.5rem; line-height: 1.4; max-width: 620px; }
+    body.marquee .chips { margin-top: 26px; }
+    body.marquee .chips b { padding: 9px 20px; font-size: 1.15rem; }
+  </style>
+</head>
+<body>
+  <div class="tile">
+    <div class="copy">
+      <div class="brand">
+        <img src="./store-icon-128.png" alt="">
+        <span>GIFMaker<span class="dot">.SHU</span></span>
+      </div>
+      <h1 id="headline"></h1>
+      <p id="sub"></p>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const size = params.get('tile') === 'marquee' ? 'marquee' : 'small';
+    const lang = (params.get('lang') || 'ko').startsWith('ko') ? 'ko' : 'en';
+    document.body.className = size;
+    document.documentElement.lang = lang;
+
+    const copy = {
+      ko: {
+        headline: '화면과 사진을<br><em>바로 GIF로.</em>',
+        sub: '촬영과 사진을 한 타임라인에 이어 붙여<br>자막까지 얹은 GIF를 바로 저장하세요.',
+        chips: ['설치 즉시 사용', '업로드 없음', '로그인 없음']
+      },
+      en: {
+        headline: 'Screen and photos<br><em>straight to GIF.</em>',
+        sub: 'Stack recordings and photos on one timeline,<br>add captions, and save it as a single GIF.',
+        chips: ['Works instantly', 'No uploads', 'No sign-in']
+      }
+    }[lang];
+
+    const shortSub = { ko: '이어 붙여 한 번에<br>GIF로 저장하세요.', en: 'Stack them and save<br>one GIF.' }[lang];
+    document.getElementById('headline').innerHTML = copy.headline;
+    document.getElementById('sub').innerHTML = size === 'small' ? shortSub : copy.sub;
+    if (size === 'marquee') {
+      document.getElementById('chips').innerHTML = copy.chips.map((c) => `<b>${c}</b>`).join('');
+    }
+  </script>
+</body>
+</html>
