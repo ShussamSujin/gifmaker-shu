@@ -23,6 +23,7 @@
         <label class="secondary file-button">이미지 불러오기<input id="imageInput" type="file" accept="image/*" multiple hidden></label>
       </div>
       <div id="status" class="status" role="status" aria-live="polite">준비됨 · 파일은 기기 밖으로 전송되지 않아요</div>
+      <p class="shortcut-hint">⌨️ <span>단축키 Ctrl+Shift+G로 언제든 열 수 있어요</span></p>
 
       <div id="capturePanel" class="capture-panel" hidden>
         <div class="preview-wrap" id="previewWrap"><video id="captureVideo" muted autoplay playsinline></video><canvas id="imageCanvas" hidden></canvas><div id="selection" class="selection"></div><div class="selection-hint">드래그해 영역 지정</div></div>
@@ -53,7 +54,10 @@
       <div id="result" class="result" hidden><img id="resultImage" alt=""><div><strong>GIF 완성!</strong><span id="resultMeta"></span></div><a id="download" class="primary" download="gifmaker-shu.gif">GIF 저장</a><button id="makeAnother" class="ghost" type="button">하나 더 만들기</button></div>
     </section>
   </main>
-  <footer><strong>GIFMaker.SHU</strong><span>모든 처리는 사용자의 브라우저 안에서 이루어집니다.</span><a href="https://gifmaker.shu.is/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><a href="https://gifmaker.shu.is/support.html" target="_blank" rel="noopener">도움말</a></footer>
+  <footer>
+    <div class="footer-row"><strong>GIFMaker.SHU</strong><span>모든 처리는 사용자의 브라우저 안에서 이루어집니다.</span><a href="https://gifmaker.shu.is/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><a href="https://gifmaker.shu.is/support.html" target="_blank" rel="noopener">도움말</a></div>
+    <div class="footer-credit">© Google Certified Trainer &amp; Innovator Sujin Lee · <a href="mailto:gajungssamzzang@gmail.com">문의: gajungssamzzang@gmail.com</a></div>
+  </footer>
   <script type="module" src="./app.js"></script>
 </body>
 </html>

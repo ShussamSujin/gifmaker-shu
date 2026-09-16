@@ -4,7 +4,7 @@ GIFMaker.SHU captures a user-selected screen area directly into GIF frames, open
 
 ## Contents
 
-- `dist/`: bilingual Korean/English website
+- `docs/`: bilingual Korean/English website — deployed to https://gifmaker.shu.is via GitHub Pages (main branch, /docs)
 - `extension/`: bilingual Manifest V3 Chrome extension
 - `STORE_LISTING_KO.md`: Korean Chrome Web Store copy
 - `STORE_LISTING_EN.md`: English Chrome Web Store copy
