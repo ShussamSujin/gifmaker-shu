@@ -86,7 +86,7 @@ const translations = {
     '확장 프로그램을 설치해서':'Install the extension','좀 더 수월하게 GIF를 캡처해보슈~~':'and capture GIFs the easy way!',
     '도구 모음의 슈슈 아이콘만 누르면 어느 페이지에서든 바로 촬영이 시작돼요. 사이트를 따로 열어둘 필요도, 영상 파일을 저장했다 다시 올릴 필요도 없습니다.':'Just click Shushu in your toolbar and recording starts on any page — no need to keep the site open, and no exporting or re-uploading video files.',
     'Chrome 웹스토어 등록 준비 중':'Chrome Web Store listing in progress','슈 패밀리의 다른 도구':'More from the SHU family',
-    '패밀리 홈':'Family home','콘텐츠 도구':'Content tool','관리자 연수 실습실':'Admin training lab','Workspace 관리 도구':'Workspace admin tool','메일 도우미':'Mail helper','🚧 계속 추가될 예정':'🚧 More coming soon',
+    '패밀리 홈':'Family home','콘텐츠 도구':'Content tool','관리자 연수 실습실':'Admin training lab','Workspace 관리 도구':'Workspace admin tool','메일 도우미':'Mail helper','AI 연결 주소 모음':'AI connector addresses','🚧 계속 추가될 예정':'🚧 More coming soon',
     '모든 처리는 사용자의 브라우저 안에서 이루어집니다.':'Everything is processed inside your browser.','도움말':'Support',
     '문의: gajungssamzzang@gmail.com':'Contact: gajungssamzzang@gmail.com',
     '단축키 Ctrl+Shift+G로 언제든 열 수 있어요':'Open anytime with Ctrl+Shift+G'
